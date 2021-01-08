@@ -1,6 +1,12 @@
 # Bitcoin Seed Phrase Composer With Dice
 Offline bitcoin seed phrase composer tool with visual word selection verification.
 
+Available here to test it https://n3s1us.github.io/bitcoin-seed-phrase-composer-with-dice/
+
+<p align="center">
+  <img src="./preview.png" width="738">
+</p>
+
 # Create your own wallet seed using regular dice
 If you want maximum security you should of course not rely on a 3rd party to generate your wallet seed. This is a way to do it using only regular 6-sided dice.
 
@@ -14,7 +20,7 @@ The 24th word in a BIP-39 seed is not a randomly generated one. Actually, the wa
 This means that part of our 24th word is actually a checksum so we can’t just choose any word, it has to be calculated. As this is almost impossible to do manually (it involves using the SHA-256 hash function) this tool has a “last word calculator”.
 
 # HOW TO USE?
-This tool is simply a web page using javascript for calculations, that can be downloaded and used offline. Now, since you have been really focused on maximum security so far you should keep that mindset for this step too.
+This tool is simply a single file web page using javascript for calculations, that can be downloaded and used offline. Now, since you have been really focused on maximum security so far you should keep that mindset for this step too.
 
 I recommends booting any Linux Live from a USB stick, get the web page on the same or another USB stick and then NEVER connect this Linux Live to internet neither before nor after!
 
