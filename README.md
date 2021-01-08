@@ -1,3 +1,8 @@
+#   Don't use its bugged, the words not have the same probabilities!
+#   Don't use its bugged, the words not have the same probabilities!
+#   Don't use its bugged, the words not have the same probabilities!
+
+
 # Bitcoin Seed Phrase Composer With Dice
 Offline bitcoin seed phrase composer tool with visual word selection verification.
 
