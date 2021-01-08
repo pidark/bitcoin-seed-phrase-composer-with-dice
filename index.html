@@ -8,6 +8,15 @@
             function buildRolls() {
                 var diceFace = document.getElementById("diceFace").value
 
+                if( diceFace < 2 ) {
+                  document.getElementById("instruction").innerHTML = `Möbius strip not allowed ;D Change number on Dice Face!`
+                  document.getElementById("instruction").style.backgroundColor = "red"
+                  return
+                } else {
+                  document.getElementById("instruction").innerHTML = `Roll the dice and put the numbers in the colored boxes! Then click "Extract the word"`
+                  document.getElementById("instruction").style.backgroundColor = "yellow"
+                }
+
                 let nWords = 2048
                 for(rolls=1; true; rolls++) {
                     nWords = nWords / diceFace
@@ -253,7 +262,7 @@
         <div id="config">
             <button onclick="location.reload();">RESET ALL</button>
             <br>
-            Number of faces of the dice <input id="diceFace" type="number" value="6" onchange="build()">  
+            Number of faces of the dice <input id="diceFace" type="number" value="6" min="2" onchange="build()">  
         <br>
         </div>
         <br>
