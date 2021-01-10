@@ -117,7 +117,12 @@
 
             function extractWord(nWords = 2048, cb = "updateSelection()", prefix = 'dice', words = bip39.wordlists.EN) {
                 let word = document.getElementById(`selected${rolls}`)
-
+                if( !word ) {
+                  document.getElementById("instruction").innerHTML = "All the colored box should be fullfilled!"
+                  document.getElementById("instruction").style.backgroundColor = "red"
+                  return
+                }
+                
                 buildRolls(nWords, cb)
                 build(prefix, words)       
 
@@ -145,7 +150,7 @@
                 } else if (nWords == 24) {
                   document.getElementById("instruction").style.backgroundColor = "yellowgreen"
                   instruction = `Last 24th word "${word.innerHTML}" extracted! Mission Complete`
-                  
+
                   document.getElementById("messageChecksum").innerHTML = `The  24th words are: <br><br> Recap of all you words is: <br><span><b>${document.getElementById("words").value}</b></span>`  
                   document.getElementById("messageChecksum").style.backgroundColor = "yellowgreen"
                   
