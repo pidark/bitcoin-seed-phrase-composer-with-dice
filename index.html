@@ -119,7 +119,7 @@
                 build()       
 
                 if ( !word.innerHTML ) {
-                    document.getElementById("instruction").innerHTML = "Selection outside the table, throw your dates again to make a round from scratch so that every word has the same probabilities!"
+                    document.getElementById("instruction").innerHTML = "Selection empty, throw your dates again to make a round from scratch so that every word has the same probabilities!"
                     document.getElementById("instruction").style.backgroundColor = "yellow"
                 } else {
                     document.getElementById("words").value += !document.getElementById("words").value ? word.innerHTML : " " + word.innerHTML
