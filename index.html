@@ -15,8 +15,10 @@
               build()
             });
 
+            var startInstruction = `Roll the dice and put the numbers in the colored boxes! Then click "Extract the word"`
+
             var rolls
-            function buildRolls() {
+            function buildRolls(nWords = 2048, cb = "updateSelection()") {
                 let diceFace = document.getElementById("diceFace").value
 
                 if( diceFace < 2 ) {
@@ -24,11 +26,10 @@
                   document.getElementById("instruction").style.backgroundColor = "red"
                   return
                 } else {
-                  document.getElementById("instruction").innerHTML = `Roll the dice and put the numbers in the colored boxes! Then click "Extract the word"`
+                  document.getElementById("instruction").innerHTML = startInstruction
                   document.getElementById("instruction").style.backgroundColor = "yellow"
                 }
 
-                let nWords = 2048
                 for(rolls=1; true; rolls++) {
                     nWords = nWords / diceFace
                     if (nWords <= 1) break
@@ -36,7 +37,7 @@
 
                 let html = ''
                 for (let i=1; i<=rolls; i++) {
-                    html += `<input id="diceInput${i}" type="number" min="1" max="${diceFace}" onkeyup="updateSelection()" onchange="updateSelection()">`
+                    html += `<input id="diceInput${i}" type="number" min="1" max="${diceFace}" onkeyup="${cb}" onchange="${cb}">`
                 }
                 document.getElementById("rolls").innerHTML = html
             }
@@ -62,26 +63,26 @@
 
                 step++
                 if( i >= iMax ) {
-                  // createQuadrant(nCells, perrow, '', 0, 1, )
-                  
-
                   return html
                 } else {
                   return createQuadrant(nCells, perrow, arr, iMax, tableClass, i, step, html)
                 }
             }
 
-            function build() {
+            function build(prefix = 'dice', words = bip39.wordlists.EN) {
                 const diceFace = document.getElementById("diceFace").value
 
                 const perrow = 2
                 const nCells = diceFace 
 
-                let html = createQuadrant(nCells, perrow, bip39.wordlists.EN, (2**5)*(3**4), "dice5")
-                html = createQuadrant(nCells, perrow, html.split("<br>"), (2**4)*(3**3), "dice4")
-                html = createQuadrant(nCells, perrow, html.split("<br>"), (2**3)*(3**2), "dice3")
-                html = createQuadrant(nCells, perrow, html.split("<br>"), (2**2)*(3**1), "dice2") 
-                html = createQuadrant(2, perrow, html.split("<br>"), (2**1)*(3**0), "dice1")
+                let html
+                for(let i = rolls; i!=0; i--) {
+                  if ( i == rolls ) {
+                    html = createQuadrant(nCells, perrow, words, (2**i)*(3**(i-1)), `${prefix}${i}`)
+                  } else {
+                    html = createQuadrant(nCells, perrow, html.split("<br>"), (2**i)*(3**(i-1)), `${prefix}${i}`)
+                  }
+                }
 
                 // Attach HTML to container
                 document.getElementById("container").innerHTML = html
@@ -95,28 +96,30 @@
                     document.getElementById("instruction").style.backgroundColor = "red"
                     return false
                 }
+                document.getElementById("instruction").innerHTML = startInstruction
+                document.getElementById("instruction").style.backgroundColor = "yellow"
                 return true
             }
-            function updateSelection() {
-              build()
+            function updateSelection(prefix = 'dice', words = bip39.wordlists.EN) {
+              build(prefix, words)
               for (let i=1; true; i++) {
                 let e = document.getElementById(`diceInput${i}`)
                 if (!e || !validateDice(i)) return
                 let n = e.value
                 if( i==1 ) {
                   n = n <= 3 ? 1 : 2
-                  document.getElementsByClassName(`dice${i}`)[n-1].id = `selected${i}`
+                  document.getElementsByClassName(`${prefix}${i}`)[n-1].id = `selected${i}`
                 } else {
-                  document.getElementById(`selected${i-1}`).getElementsByClassName(`dice${i}`)[n-1].id = `selected${i}`
+                  document.getElementById(`selected${i-1}`).getElementsByClassName(`${prefix}${i}`)[n-1].id = `selected${i}`
                 }
               }
             }
 
-            function extractWord() {
-                let word = document.getElementById(`selected5`)
+            function extractWord(nWords = 2048, cb = "updateSelection()", prefix = 'dice', words = bip39.wordlists.EN) {
+                let word = document.getElementById(`selected${rolls}`)
 
-                buildRolls()
-                build()       
+                buildRolls(nWords, cb)
+                build(prefix, words)       
 
                 if ( !word.innerHTML ) {
                     document.getElementById("instruction").innerHTML = "Selection empty, throw your dates again to make a round from scratch so that every word has the same probabilities!"
@@ -129,15 +132,46 @@
 
             function updateExtractedCount(word) {
                 let nWords = document.getElementById("words").value.split(" ").length
-                document.getElementById("wordNumber").innerHTML = `Extracted words: ${nWords}/23`
+                document.getElementById("wordNumber").innerHTML = `Extracted words: ${nWords}/24`
 
                 let instruction
                 if (nWords == 23) {
                     instruction = 'Now you can click "Calculate Last 24th Word"!'
                     document.getElementById("instruction").style.backgroundColor = "yellowgreen"
+                    document.getElementById("extractWord").setAttribute('onclick','lastWords()')
+                    document.getElementById("extractWord").innerHTML = 'Calculate Last 24th Words'
+                    document.getElementById("rolls").style.visibility = "hidden";
+                    document.getElementById("container").style.visibility = "hidden";
+                } else if (nWords == 24) {
+                  document.getElementById("instruction").style.backgroundColor = "yellowgreen"
+                  instruction = `Last 24th word "${word.innerHTML}" extracted! Mission Complete`
+                  
+                  document.getElementById("messageChecksum").innerHTML = `The  24th words are: <br><br> Recap of all you words is: <br><span><b>${document.getElementById("words").value}</b></span>`  
+                  document.getElementById("messageChecksum").style.backgroundColor = "yellowgreen"
+                  
+                  document.getElementById("rolls").style.visibility = "hidden";
+                  document.getElementById("container").style.visibility = "hidden";
+                  document.getElementById("extractWord").style.visibility = "hidden";
+                  document.getElementById("virtualDice").style.visibility = "hidden";
+                  document.getElementById("generateSample").style.visibility = "hidden";
+                  
+                  
                 } else {
+                    if(word) {
                     instruction = `Word "${word.innerHTML}" extracted! Rolls again your dice to pick another one!`
                     document.getElementById("instruction").style.backgroundColor = "aquamarine"
+                    } else {
+                      instruction = startInstruction
+                      document.getElementById("instruction").style.backgroundColor = "yellow"
+                    }
+                    document.getElementById("extractWord").setAttribute('onclick','extractWord()')
+                    document.getElementById("extractWord").innerHTML = 'Extract the Word'
+
+                    
+                    document.getElementById("rolls").style.visibility = "visible";
+                    document.getElementById("container").style.visibility = "visible";
+                    buildRolls()
+                    build()
                 }
                 document.getElementById("instruction").innerHTML = instruction
             }
@@ -146,16 +180,35 @@
              * LAST WORD FUNCTION
              */
 
-            function lastWord() {
+            let checksumWords
+            function lastWords() {
                 const validation = validate(document.getElementById("words").value)
                 if ( validation.errorMessage ) {
                     document.getElementById("messageChecksum").innerHTML = validation.errorMessage
                     document.getElementById("messageChecksum").style.backgroundColor = "red"
                 } else {
-                    const checksumWord = firstChecksumWordAlphabetically(validation.cleanedUpPhrase)
-                    document.getElementById("messageChecksum").style.backgroundColor = "yellowgreen"
-                    document.getElementById("messageChecksum").innerHTML = `The last 24th word is "${checksumWord}"<br><br> Recap of all you words is: <br><span><b>${document.getElementById("words").value} ${checksumWord}</b></span>`
-                }
+                    checksumWords = allChecksumWords(validation.cleanedUpPhrase)
+                    
+                    document.getElementById("rolls").style.visibility = "visible";
+                    document.getElementById("container").style.visibility = "visible";
+                    buildRolls(checksumWords.length, "updateLastSelection()")
+                    build('lastRound', checksumWords)
+
+                    document.getElementById("container").classList.add('finalTable')
+                    document.getElementById("messageChecksum").innerHTML = 'The last possibile 24th words are:'  
+                    document.getElementById("messageChecksum").style.backgroundColor = "white"
+                    document.getElementById("extractWord").setAttribute('onclick','extractLastWord()')
+                    document.getElementById("extractWord").innerHTML = 'Extract the last 24th word'
+                    
+                  }
+            }
+
+            function updateLastSelection() {
+              updateSelection('lastRound', checksumWords)
+            }
+
+            function extractLastWord() {
+              extractWord(checksumWords.length, "updateLastSelection()", "lastRound", checksumWords)
             }
 
             /**
@@ -172,12 +225,12 @@
             function virtualDice() {
                 for (let i=1; true; i++) {
                     if (!document.getElementById(`diceInput${i}`)) {
-                        updateSelection()
+                        !checksumWords ? updateSelection() : updateLastSelection()
                         return
                     }
                     document.getElementById(`diceInput${i}`).value = getRandomInt(1, document.getElementById("diceFace").value)
                 }
-                updateSelection()
+                !checksumWords ? updateSelection() : updateLastSelection()
             }
 
             Array.prototype.random = function () {
@@ -233,9 +286,12 @@
                 margin: auto;
                 border: 1px solid gray;
                 table-layout: fixed;
-                width: 100% !important;
+                width: 100%;
                 height: 52px;
                 font-size: 10px;
+            }
+            .finalTable table {
+              width: auto;
             }
             #words {
                 width: 100%;
@@ -265,25 +321,23 @@
         <br>
         </div>
         <br>
-        <span id="instruction">Roll the dice and put the numbers in the colored boxes! Then click "Extract the word" </span>
+        <span id="instruction"></span>
         <br>
         <div class="testing">
-            <button onclick="virtualDice()">Generate Random Number (Virtual Dice For Test ONLY!!!)</button>
+            <button id="virtualDice" onclick="virtualDice()">Generate Random Number (Virtual Dice For Test ONLY!!!)</button>
         </div>
         <span id="rolls">
         </span>
         <br>
-        <button onclick="extractWord()">Extract the word</button> 
+        <button id="extractWord" onclick="extractWord()">Extract the word</button>
         <br>
         <div class="testing">
-            <button onclick="generateSample()">Generate Sample 23 words (For Test ONLY!!!)</button>
+            <button id="generateSample" onclick="generateSample()">Generate Sample 23 words (For Test ONLY!!!)</button>
         </div>
-        <input id="words">
-        <span id="wordNumber">Extracted words: 0/23</span>
+        <input id="words" onkeyup="updateExtractedCount()">
+        <span id="wordNumber">Extracted words: 0/24</span>
         <br>
-        <br>
-        <button onclick="lastWord()">Calculate Last 24th Word</button> 
-        <br>        
+        <br>     
         <span id="messageChecksum"></span>
         <br>
         <div id="container">
@@ -332,10 +386,6 @@
             errorMessage: errorMsg,
             cleanedUpPhrase: words
         }
-    }
-
-    function firstChecksumWordAlphabetically(suppliedSeedPhrase) {
-        return allChecksumWords(suppliedSeedPhrase)[0]
     }
 
     function allChecksumWords(suppliedSeedPhrase) {
