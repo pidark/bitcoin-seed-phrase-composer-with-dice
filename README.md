@@ -26,6 +26,7 @@ I recommends booting any Linux Live from a USB stick, get the web page on the sa
 
 # References
 [Create your own wallet seed using regular dice](https://en.bitcoin.se/articles/create-your-own-wallet-seed-using-regular-dice) 
+
 [SeedPicker](https://seedpicker.net/calculator/last-word.html)
 
 
