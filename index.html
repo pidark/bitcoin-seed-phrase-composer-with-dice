@@ -10,38 +10,38 @@
           |__/                                 |_|
         -->
         <script>
-            window.addEventListener("load", function(){
-              buildRolls()
-              build()
-              buildAbout()
-            });
+          window.addEventListener("load", function(){
+            buildRolls()
+            build()
+            buildAbout()
+          });
 
-            var startInstruction = `Roll the dice and put the numbers in the colored boxes! Then click "Extract the word"`
+          var startInstruction = `Roll the dice and put the numbers in the colored boxes! Then click "Extract the word"`
 
-            var rolls
-            function buildRolls(nWords = 2048, cb = "updateSelection()") {
-                let diceFace = document.getElementById("diceFace").value
+          var rolls
+          function buildRolls(nWords = 2048, cb = "updateSelection()") {
+              let diceFace = document.getElementById("diceFace").value
 
-                if( diceFace < 2 ) {
-                  document.getElementById("instruction").innerHTML = `Möbius strip not allowed ;D Change number on Dice Face!`
-                  document.getElementById("instruction").style.backgroundColor = "red"
-                  return
-                } else {
-                  document.getElementById("instruction").innerHTML = startInstruction
-                  document.getElementById("instruction").style.backgroundColor = "yellow"
-                }
+              if( diceFace < 2 ) {
+                document.getElementById("instruction").innerHTML = `Möbius strip not allowed ;D Change number on Dice Face!`
+                document.getElementById("instruction").style.backgroundColor = "red"
+                return
+              } else {
+                document.getElementById("instruction").innerHTML = startInstruction
+                document.getElementById("instruction").style.backgroundColor = "yellow"
+              }
 
-                for(rolls=1; true; rolls++) {
-                    nWords = nWords / diceFace
-                    if (nWords <= 1) break
-                }
+              for(rolls=1; true; rolls++) {
+                  nWords = nWords / diceFace
+                  if (nWords <= 1) break
+              }
 
-                let html = ''
-                for (let i=1; i<=rolls; i++) {
-                    html += `<input id="diceInput${i}" type="number" min="1" max="${diceFace}" onkeyup="${cb}" onchange="${cb}">`
-                }
-                document.getElementById("rolls").innerHTML = html
-            }
+              let html = ''
+              for (let i=1; i<=rolls; i++) {
+                  html += `<input id="diceInput${i}" type="number" min="1" max="${diceFace}" onkeyup="${cb}" onchange="${cb}">`
+              }
+              document.getElementById("rolls").innerHTML = html
+          }
 
             function createQuadrant(nCells, perrow, arr = bip39.wordlists.EN, iMax = 2592, tableClass, i = 0, step = 1, html = '') {
               let tableBody = ""
@@ -380,7 +380,8 @@
     <body>
       <div id="header">
         <div>
-          This page is designed to be used on an offline and fully secure computer.
+          Your browser appears to be connected to some network!!!<br>
+          This page is designed to be used on an offline and fully secure computer. <br>
           You can try it out in online mode, but before using it for amounts you are not ready to lose, you should go offline.
         </div>
         <a href="https://github.com/n3s1us/bitcoin-seed-phrase-composer-with-dice">Go to readme</a>
@@ -476,6 +477,12 @@
                 return ""
             }
         };
+    }
+    /**
+     * OFFLINE CHECK CONTROL
+     */
+    if(!navigator.onLine) {
+      document.getElementById("header").style.display = "none"
     }
     </script>
     <!-- 
