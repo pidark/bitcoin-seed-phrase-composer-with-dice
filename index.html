@@ -304,7 +304,7 @@
             #instruction {
                 background-color: yellow;
             }
-            #footer {
+            #header {
                 color: red;
             }
         </style>
@@ -319,37 +319,42 @@
 
     -->
     <body>
-        <div id="config">
-            <button onclick="location.reload();">RESET ALL</button>
-            <br>
-            Number of faces of the dice <input id="diceFace" type="number" value="6" min="2" disabled="disabled" onchange="build()">  
-        <br>
+      <div id="header">
+        <div>
+          This page is designed to be used on an offline and fully secure computer.
+          You can try it out in online mode, but before using it for amounts you are not ready to lose, you should go offline.
         </div>
-        <br>
-        <span id="instruction"></span>
-        <br>
-        <div class="testing">
-            <button id="virtualDice" onclick="virtualDice()">Generate Random Number (Virtual Dice For Test ONLY!!!)</button>
-        </div>
-        <span id="rolls">
-        </span>
-        <br>
-        <button id="extractWord" onclick="extractWord()">Extract the word</button>
-        <br>
-        <div class="testing">
-            <button id="generateSample" onclick="generateSample()">Generate Sample 23 words (For Test ONLY!!!)</button>
-        </div>
-        <input id="words" onkeyup="updateExtractedCount()">
-        <span id="wordNumber">Extracted words: 0/24</span>
-        <br>
-        <br>     
-        <span id="messageChecksum"></span>
-        <br>
-        <div id="container">
-            Table of Words!
-        </div>
-        <div id="footer"><span>This page is designed to be used on an offline and fully secure computer.
-            You can try it out in online mode, but before using it for amounts you are not ready to lose, you should go offline.<span></div>
+        <a href="https://github.com/n3s1us/bitcoin-seed-phrase-composer-with-dice">Go to readme</a>
+      </div>
+      <div id="config">
+          <button onclick="location.reload();">RESET ALL</button>
+          <br>
+          Number of faces of the dice <input id="diceFace" type="number" value="6" min="2" disabled="disabled" onchange="build()">  
+      <br>
+      </div>
+      <br>
+      <span id="instruction"></span>
+      <br>
+      <div class="testing">
+          <button id="virtualDice" onclick="virtualDice()">Generate Random Number (Virtual Dice For Test ONLY!!!)</button>
+      </div>
+      <span id="rolls">
+      </span>
+      <br>
+      <button id="extractWord" onclick="extractWord()">Extract the word</button>
+      <br>
+      <div class="testing">
+          <button id="generateSample" onclick="generateSample()">Generate Sample 23 words (For Test ONLY!!!)</button>
+      </div>
+      <input id="words" onkeyup="updateExtractedCount()">
+      <span id="wordNumber">Extracted words: 0/24</span>
+      <br>
+      <br>     
+      <span id="messageChecksum"></span>
+      <br>
+      <div id="container">
+          Table of Words!
+      </div>
     </body>
     <!--
         Logic Word Checksum
