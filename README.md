@@ -14,6 +14,9 @@ To be really, really sure that you have created a Bitcoin wallet that's secure y
 
 The good thing about this method is that it is completely obvious what you are doing. You want 23 random words from a list of 2048 words so you simply draw words from a hat.
 
+# Using more dice instead of one
+If you wanna speed up the process by using more dice instead of one you need to make sure that you read the results in a predetermined order (so that your own brain is not involved in the process of deciding which die should be read first). The simplest way to do this is to always read the from left to right as they land on the table. Another option would be to use differently colored dice and decide that the red one is the first one, the blue one is the second etc.
+
 # What about the 24th word?!
 The 24th word in a BIP-39 seed is not a randomly generated one. Actually, the way a seed is normally generated is by a computer generating 256 bits of random data. From this data a checksum of 8 bits is then calculated and appended to the 256 bits. The 264 resulting bits are divided into 24 parts of 11 bits each and each one of those 11 bits is converted into a word, using a predetermined word list.
 
