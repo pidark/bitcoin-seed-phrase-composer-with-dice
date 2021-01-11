@@ -473,7 +473,7 @@
             try {
                 bip39.mnemonicToEntropy(candidate)
                 return current
-            } catch {
+            } catch(e) {
                 return ""
             }
         };
