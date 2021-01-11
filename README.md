@@ -4,7 +4,7 @@ Offline bitcoin seed phrase composer tool with visual word selection verificatio
 Available here to test it https://n3s1us.github.io/bitcoin-seed-phrase-composer-with-dice/
 
 <p align="center">
-  <img src="./preview.png" width="738">
+  <img src="./preview.gif" width="738">
 </p>
 
 # Create your own wallet seed using regular dice
