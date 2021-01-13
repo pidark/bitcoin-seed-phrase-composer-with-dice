@@ -109,16 +109,22 @@
             function buildAbout() {
               const about = `
                 <b>About</b><br>
-                This is a way to generate a (BIP-39) seed for a bitcoin wallet, completely offline, using only a regular 6-sided die.<br>
+                This is a way to generate a (BIP-39) seed for a bitcoin wallet, completely offline, using a ${diceFace == 2 ? 'coin' : diceFace+'-sided die'}, with a fully verifiable source of entropy.<br>
                 <br>
-                Each page is divided into 6 large rectangles, each of those into 6 smaller ones and each of those into 6 even smaller ones. You use a dire to "drill down" until you reach a word.<br>
+                Each quadrant is divided into ${diceFace} large rectangles, each of those into ${diceFace} smaller ones and each of those into ${diceFace} even smaller ones. You use a dice to "drill down" until you reach a word.<br>
                 <br>
                 You can use this method to get the first 23 words of your seed but because the 24th word cointains a checksum it has to be calulated a finally extract the last 24h possibile words in same manner of the previus.<br>
                 <br>
                 <b>How to use?</b><br>
                 This tool is simply a single file web page using javascript for calculations, that can be downloaded and used offline (right click "Save as...""). <br>
                 <br>
-                For example you can use it on any Linux Live from a USB stick and NEVER connect this Linux Live to internet neither before nor after!<br>`
+                For example you can use it on any Linux Live from a USB stick and NEVER connect this Linux Live to internet neither before nor after!<br>
+                <br>
+                <b>Using more ${diceFace == 2? 'coin': 'dice'} instead of one</b><br>
+                <rb>
+                If you wanna speed up the process by using more ${diceFace == 2? 'coin': 'dice'} instead of one you need to make sure that you read the results in a predetermined order (so that your own brain is not involved in the process of deciding which die should be read first).<br>
+                <br>
+                The simplest way to do this is to always read the from left to right as they land on the table. Another option would be to use differently colored dice and decide that the red one is the first one, the blue one is the second etc.`
               let algorithm = `
                 <b>Algorithm</b><br>
                 <br>
