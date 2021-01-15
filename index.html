@@ -579,6 +579,16 @@
         };
     }
     /**
+     * Pub Keys
+     */
+    function xpubFromMnemonic(mnemonic, derivationPath) {
+      const seed = bip39.mnemonicToSeedSync(mnemonic)
+      const node = bip32.fromSeed(seed)
+      const child = node.derivePath(derivationPath.full)
+      return child.neutered().toBase58()
+    } 
+
+    /**
      * OFFLINE CHECK CONTROL
      */
     if(!navigator.onLine) {
