@@ -713,10 +713,23 @@
       //   / _ \| |_| |_| | | '_ \ / _ \  / __| '_ \ / _ \/ __| |/ /
       //  | (_) |  _|  _| | | | | |  __/ | (__| | | |  __/ (__|   <
       //   \___/|_| |_| |_|_|_| |_|\___|  \___|_| |_|\___|\___|_|\_\
-
-      if(!navigator.onLine) {
-        document.getElementById("header").style.display = "none"
+      
+      async function isConnectionExist() {
+        return await fetch(`https://8.8.8.8/?thisUrlShouldBeReturn404&rand=${Math.round(Math.random() * 10000)}`, {'mode':'no-cors'})
+          .then(function () {
+            return true
+          })
+          .catch(function () {
+            return false
+          })
       }
+      (async () => {
+        const connected = await isConnectionExist()      
+        if(!connected) {
+          document.getElementById("header").style.display = "none"
+        }
+      })()
+
       </script>
       <!-- 
       
