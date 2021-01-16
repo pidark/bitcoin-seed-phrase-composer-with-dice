@@ -501,10 +501,47 @@
       }
 
       function showPubKeys() {
+        let path
+        if(!document.getElementById("path")) { // First start
+          path = `m/84'/0'/0'/0`
+          document.getElementById("container").innerHTML = `
+          <h1>BIP32 Extended Public Key</h1>
+          <span>BIP32 Derivation Path</span>
+          <input id="path" type="text" value="${path}" onchange="showPubKeys()">
+          <select id="selectPath" onchange="writePath();showPubKeys()">
+            <option value="m/84'/0'/0'/0" selected>BIP84</option>
+            <option value="m/49'/0'/0'/0">BIP49</option>
+            <option value="m/44'/0'/0'/0">BIP44</option>
+          </select>
+          <div id="pubs">a
+          </div>`
+        } else {
+          path = document.getElementById("path").value
+        }
+
+        // if( path != document.getElementById("selectPath").value ) 
+        document.getElementById('selectPath').value = path
+
+
         const words = document.getElementById("words").value
-        const path = `m/84'/0'/0'/0`
-        const account = keysFromMnemonic(words, path)
-        document.getElementById("container").innerHTML = `<h1>Public Keys</h1><input id="path" type="text" value="${path}"><h2>Xpub</h2><p>${account.xpub}</p><h2>Zpub</h2><p>${account.Zpub}</p>`
+        try {
+          const account = keysFromMnemonic(words, path)
+          document.getElementById("pubs").style.visibility = `visible`
+          document.getElementById("pubs").innerHTML = `
+          <h2>xpub</h2>
+            <p>${account.xpub}</p>
+          <h2>ypub</h2>
+            <p>${account.ypub}</p>
+          <h2>zpub</h2>
+            <p>${account.zpub}</p>`
+        } catch(e) {
+          throw e
+          document.getElementById("pubs").style.visibility = `hidden`
+        }
+      }
+
+      function writePath() {
+        document.getElementById("path").value = document.getElementById("selectPath").value
       }
             // document.getElementById("container").style.visibility = "hidden";
 
@@ -614,10 +651,11 @@
       // |_|    \__,_|_.__/  |_|\_\___|\__, |___/
       //                               |___/
       function keysFromMnemonic(mnemonic, derivationPath) {
+        const xpub = xpubFromMnemonic(mnemonic, derivationPath)
         return {
-          xpub: xpubFromMnemonic(mnemonic, derivationPath),
-          Zpub: convertPubkey(xpubFromMnemonic(mnemonic, derivationPath), 'Zpub'),
-          Vpub: convertPubkey(xpubFromMnemonic(mnemonic, derivationPath), 'Vpub'),
+          xpub,
+          ypub: convertPubkey(xpub, 'ypub'),
+          zpub: convertPubkey(xpub, 'zpub'),
           derivationPath
         }
       }
