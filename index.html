@@ -528,11 +528,12 @@
           const account = keysFromMnemonic(words, path)
           document.getElementById("pubs").style.visibility = `visible`
           document.getElementById("pubs").innerHTML = `
-          <h2>xpub</h2>
+          <h2>Check if the hardware wallet public key matches the same key type</h2>
+          <h3>xpub</h3>
             <p>${account.xpub}</p>
-          <h2>ypub</h2>
+          <h3>ypub</h3>
             <p>${account.ypub}</p>
-          <h2>zpub</h2>
+          <h3>zpub</h3>
             <p>${account.zpub}</p>`
         } catch(e) {
           throw e
