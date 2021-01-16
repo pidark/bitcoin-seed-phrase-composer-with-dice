@@ -93,7 +93,7 @@
     <body>
       <div id="header">
         <span>
-          Your browser appears to be connected to some network!!!<br>
+          Your browser appears to be connected to internet!!!<br>
           This page is designed to be used on an offline and fully secure computer. <br>
           You can try it out in online mode, but before using it for amounts you are not ready to lose, you should go offline.
         </span>
@@ -715,7 +715,7 @@
       //   \___/|_| |_| |_|_|_| |_|\___|  \___|_| |_|\___|\___|_|\_\
       
       async function isConnectionExist() {
-        return await fetch(`https://8.8.8.8/?thisUrlShouldBeReturn404&rand=${Math.round(Math.random() * 10000)}`, {'mode':'no-cors'})
+        return await fetch(`https://8.8.8.8/?CheckInternetConnection&random=${Math.round(Math.random() * 10000)}`, {'mode':'no-cors'})
           .then(function () {
             return true
           })
@@ -723,12 +723,23 @@
             return false
           })
       }
-      (async () => {
+
+      const sleep = m => new Promise(r => setTimeout(r, m))
+
+      const warning = async () => {
         const connected = await isConnectionExist()      
         if(!connected) {
           document.getElementById("header").style.display = "none"
+        } else {
+          document.getElementById("header").style.display = "block"
         }
-      })()
+        await sleep(30000)
+        await warning()
+      }
+      warning()
+      
+
+
 
       </script>
       <!-- 
