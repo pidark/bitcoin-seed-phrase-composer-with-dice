@@ -502,15 +502,15 @@
       function showPubKeys() {
         let path
         if(!document.getElementById("path")) { // First start
-          path = `m/84'/0'/0'/0`
+          path = `m/84'/0'/0'`
           document.getElementById("container").innerHTML = `
-          <h1>BIP32 Extended Public Key</h1>
-          <span>BIP32 Derivation Path</span>
+          <h1>Account Extended Public Key</h1>
+          <span>Derivation Path</span>
           <input id="path" type="text" value="${path}" onchange="showPubKeys()">
           <select id="selectPath" onchange="writePath();showPubKeys()">
-            <option value="m/84'/0'/0'/0" selected>BIP84</option>
-            <option value="m/49'/0'/0'/0">BIP49</option>
-            <option value="m/44'/0'/0'/0">BIP44</option>
+            <option value="m/84'/0'/0'" selected>BIP84 - bech32 address starting with bc1...</option>
+            <option value="m/49'/0'/0'">BIP49 - legacy segwit address starting with 3...</option>
+            <option value="m/44'/0'/0'">BIP44 - legacy old address starting with 1... or if multisig 3... </option>
           </select>
           <div id="pubs">a
           </div>`
@@ -526,14 +526,10 @@
         try {
           const account = keysFromMnemonic(words, path)
           document.getElementById("pubs").style.visibility = `visible`
-          document.getElementById("pubs").innerHTML = `
-          <h2>Check if the hardware wallet public key matches the same key type</h2>
-          <h3>xpub</h3>
-            <p>${account.xpub}</p>
-          <h3>ypub</h3>
-            <p>${account.ypub}</p>
-          <h3>zpub</h3>
-            <p>${account.zpub}</p>`
+          let html = `<h2>Check if the hardware wallet public key matches the same key type</h2><h3>xpub</h3><p>${account.xpub}</p>`
+          html += path == `m/49'/0'/0'` ? `<h3>ypub</h3><p>${account.ypub}</p>` : ''
+          html += path == `m/84'/0'/0'` ? `<h3>zpub</h3><p>${account.zpub}</p>` : ''
+          document.getElementById("pubs").innerHTML = html
         } catch(e) {
           console.log(e)
           document.getElementById("pubs").style.visibility = `hidden`
