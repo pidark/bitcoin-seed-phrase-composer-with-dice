@@ -415,7 +415,7 @@
       }
 
       function updateExtractedCount(word) {
-          let nWords = document.getElementById("words").value.split(" ").length
+          let nWords = document.getElementById("words").value.split(" ").filter((n) => { return n != '' }).length
           document.getElementById("wordNumber").innerHTML = `Extracted words: ${nWords}/24`
 
           let instruction
@@ -428,10 +428,29 @@
               document.getElementById("rolls").innerHTML = "";
               document.getElementById("container").style.visibility = "hidden";
           } else if (nWords == 24) {
-            document.getElementById("instruction").style.backgroundColor = "yellowgreen"
-            instruction = `Last 24th word "${word.innerHTML}" extracted! Mission Complete`
+            const words = document.getElementById("words").value
+            if(word) {
+              document.getElementById("instruction").style.backgroundColor = "yellowgreen"
+              instruction = `Last 24th word "${word.innerHTML}" extracted! Mission Complete`
+            } else {
+              document.getElementById("instruction").style.backgroundColor = "yellow"
+              instruction = 'Entering words by hand...'
+              document.getElementById("instruction").innerHTML = instruction
 
-            document.getElementById("messageChecksum").innerHTML = `The  24th words are: <br><br> Recap of all you words is: <br><span><b>${document.getElementById("words").value}</b></span>`  
+              if(!bip39.validateMnemonic(words, bip39.wordlists.EN)) {
+                document.getElementById("messageChecksum").innerHTML = `Invalid mnemonic`  
+                document.getElementById("messageChecksum").style.backgroundColor = "red"
+                document.getElementById("container").innerHTML = `` 
+                return
+              }
+              document.getElementById("instruction").style.backgroundColor = "yellowgreen"
+              instruction = 'Entered words by hand! Mnemonic is valid!'
+            }
+
+            
+            document.getElementById("container").style.visibility = "visible";
+
+            document.getElementById("messageChecksum").innerHTML = `The  24th words are: <br><br> Recap of all you words is: <br><span><b>${words}</b></span>`  
             document.getElementById("messageChecksum").style.backgroundColor = "yellowgreen"
             
             document.getElementById("rolls").style.visibility = "hidden";
