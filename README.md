@@ -1,7 +1,7 @@
 # Bitcoin Seed Phrase Composer With Dice
 Offline bitcoin seed phrase composer tool with visual word selection verification.
 
-Available here to test it https://n3s1us.github.io/bitcoin-seed-phrase-composer-with-dice/
+Available here to test it https://giuliodelta.github.io/bitcoin-seed-phrase-composer-with-dice/
 
 <p align="center">
   <img src="./preview.gif" width="738">
@@ -33,7 +33,3 @@ I recommends booting any Linux Live from a USB stick, get the web page on the sa
 [SeedPicker](https://seedpicker.net/calculator/last-word.html)
 
 
-
-# Donations are welcome
-
-bc1qzxvd55p0vxks6ffrrja65e4rcsd3ndhf8gme72
