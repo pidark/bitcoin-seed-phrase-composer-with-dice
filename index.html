@@ -125,11 +125,10 @@
       <div id="sticky">
         <span id="instruction"></span>
           <br>
-          <span id="rolls">
-        </span>
-        <span>
-          <button id="extractWord" onclick="extractWord()">Extract the word</button>
-        </span>
+          <span id="rolls"></span>
+          <span>
+            <button id="extractWord" class="focusable" onclick="extractWord()">Extract the word</button>
+          </span>
         <br>
         <div class="testing">
         </div>
@@ -164,6 +163,7 @@
         buildRolls()
         build()
         buildAbout()
+        enterLikeATab()
       });
 
       var startInstruction = `Roll the dice and put the numbers in the colored boxes! Then click "Extract the word"`
@@ -349,6 +349,18 @@
 
       }
 
+      function enterLikeATab() {        
+        document.addEventListener('keydown', function (event) {
+          if (event.keyCode === 13 && event.target.nodeName === 'INPUT' && document.getElementById(`instruction`).style.backgroundColor != "red") {
+            try {
+              event.target.nextSibling.focus();
+            } catch {
+              try {event.target.parentNode.nextElementSibling.childNodes[0].nextSibling.focus()} catch {}
+            }
+          }
+        })
+      }
+
 
       //           _           _   _                __                  _   _
       //  ___  ___| | ___  ___| |_(_) ___  _ __    / _|_   _ _ __   ___| |_(_) ___  _ __  ___
@@ -413,6 +425,7 @@
               document.getElementById("words").value += !document.getElementById("words").value ? word.innerHTML : " " + word.innerHTML
               updateExtractedCount(word)
           }
+          try {document.getElementById("diceInput1").focus()} catch {}
       }
 
       function updateExtractedCount(word) {
@@ -508,6 +521,7 @@
           document.getElementById("extractWord").innerHTML = 'Extract the last 24th word'
           document.getElementById("diceFace").disabled = "disabled"
           document.getElementById("words").disabled = "disabled"
+          document.getElementById("diceInput1").focus()
         }
       }
 
