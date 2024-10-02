@@ -1,7 +1,7 @@
 # Bitcoin Seed Phrase Composer With Dice
 Offline bitcoin seed phrase composer tool with visual word selection verification.
 
-Available here to test it https://giuliodelta.github.io/bitcoin-seed-phrase-composer-with-dice/
+Available here to test it https://pidark.github.io/bitcoin-seed-phrase-composer-with-dice/
 
 <p align="center">
   <img src="./preview.gif" width="738">
