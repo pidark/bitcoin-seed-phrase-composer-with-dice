@@ -112,6 +112,12 @@
             <option value="8">8-sided die</option>
             <option value="16">16-sided die</option>
           </select>
+          <br>
+          Seed Phrase Length
+          <select id="seedPhraseLength" onchange="updateSeedPhraseLength();build();buildAbout();">
+            <option value="12">12 words</option>
+            <option value="24" selected="selected">24 words</option>
+          </select>
       <br>
       </div>
       <br>
@@ -120,7 +126,7 @@
       <div class="testing">
         <button id="virtualDice" onclick="virtualDice()">Generate Random Number (Virtual Dice For Test ONLY!!!)</button>
         <br>
-        <button id="generateSample" onclick="generateSample()">Generate Sample 23 words (For Test ONLY!!!)</button>
+        <button id="generateSample" onclick="generateSample()"></button>
     </div>
       <div id="sticky">
         <span id="instruction"></span>
@@ -134,7 +140,7 @@
         </div>
         <input id="words" onkeyup="updateExtractedCount()" autocomplete="off">
       </div>
-      <span id="wordNumber">Extracted words: 0/24</span>
+      <span id="wordNumber"></span>
       <br>
       <br>     
       <span id="messageChecksum"></span>
@@ -160,6 +166,7 @@
      
 
       window.addEventListener("load", function(){
+        updateSeedPhraseLength()
         buildRolls()
         build()
         buildAbout()
@@ -215,6 +222,14 @@
         }
       }
 
+      var seedPhraseLength
+
+      function updateSeedPhraseLength() {
+        seedPhraseLength = parseInt(document.getElementById("seedPhraseLength").value)
+        document.getElementById("wordNumber").innerHTML = `Extracted words: 0/${seedPhraseLength}`
+        document.getElementById("generateSample").innerHTML = `Generate Sample ${seedPhraseLength - 1} words (For Test ONLY!!!)`
+      }
+
       function build(prefix = 'dice', words = bip39.wordlists.EN) {
           let firstPerrow = 2
           if (diceFace == 2) firstPerrow = 1
@@ -260,7 +275,7 @@
           <br>
           Each quadrant is divided into ${diceFace} large rectangles, each of those into ${diceFace} smaller ones and each of those into ${diceFace} even smaller ones. You use a dice to "drill down" until you reach a word.<br>
           <br>
-          You can use this method to get the first 23 words of your seed but because the 24th word cointains a checksum it has to be calulated a finally extract the last 24h possibile words in same manner of the previus.<br>
+          You can use this method to get the first ${seedPhraseLength - 1} words of your seed but because the ${seedPhraseLength}th word cointains a checksum it has to be calulated a finally extract the last ${seedPhraseLength}th possibile words in same manner of the previus.<br>
           <br>
           <b>How to use?</b><br>
           This tool is simply a single file web page using javascript for calculations, that can be downloaded and used offline (right click "Save as...""). <br>
@@ -296,7 +311,7 @@
 
           algorithm += `
           <br>
-          - Repeat step rounds of selection until you  23 words<br>`
+          - Repeat step rounds of selection until you get ${seedPhraseLength - 1} words<br>`
 
           if(diceFace == 6) {
             algorithm += `- If final rectangle is empty, you have to <u>start the round from scratch</u><br>`
@@ -430,22 +445,22 @@
 
       function updateExtractedCount(word) {
           let nWords = document.getElementById("words").value.split(" ").filter((n) => { return n != '' }).length
-          document.getElementById("wordNumber").innerHTML = `Extracted words: ${nWords}/24`
+          document.getElementById("wordNumber").innerHTML = `Extracted words: ${nWords}/${seedPhraseLength}`
 
           let instruction
-          if (nWords == 23) {
-              instruction = 'Now you can click "Calculate Last 24th Word"!'
+          if (nWords == seedPhraseLength - 1) {
+              instruction = `Now you can click "Calculate Last ${seedPhraseLength}th Word"!`
               document.getElementById("instruction").style.backgroundColor = "yellowgreen"
               document.getElementById("extractWord").setAttribute('onclick','lastWords()')
-              document.getElementById("extractWord").innerHTML = 'Calculate Last 24th Words'
+              document.getElementById("extractWord").innerHTML = `Calculate Last ${seedPhraseLength}th Words`
               document.getElementById("rolls").style.visibility = "hidden";
               document.getElementById("rolls").innerHTML = "";
               document.getElementById("container").style.visibility = "hidden";
-          } else if (nWords == 24) {
+          } else if (nWords == seedPhraseLength) {
             const words = document.getElementById("words").value
             if(word) {
               document.getElementById("instruction").style.backgroundColor = "yellowgreen"
-              instruction = `Last 24th word "${word.innerHTML}" extracted! Mission Complete`
+              instruction = `Last ${seedPhraseLength}th word "${word.innerHTML}" extracted! Mission Complete`
             } else {
               document.getElementById("instruction").style.backgroundColor = "yellow"
               instruction = 'Entering words by hand...'
@@ -464,7 +479,7 @@
             
             document.getElementById("container").style.visibility = "visible";
 
-            document.getElementById("messageChecksum").innerHTML = `The  24th words are: <br><br> Recap of all you words is: <br><span><b>${words}</b></span>`  
+            document.getElementById("messageChecksum").innerHTML = `The  ${seedPhraseLength}th words are: <br><br> Recap of all you words is: <br><span><b>${words}</b></span>`  
             document.getElementById("messageChecksum").style.backgroundColor = "yellowgreen"
             
             document.getElementById("rolls").style.visibility = "hidden";
@@ -515,11 +530,12 @@
           build('lastRound', checksumWords)
 
           document.getElementById("container").classList.add('finalTable')
-          document.getElementById("messageChecksum").innerHTML = 'The last possibile 24th words are:'  
+          document.getElementById("messageChecksum").innerHTML = `The last possible ${seedPhraseLength}th words are:`  
           document.getElementById("messageChecksum").style.backgroundColor = "white"
           document.getElementById("extractWord").setAttribute('onclick','extractLastWord()')
-          document.getElementById("extractWord").innerHTML = 'Extract the last 24th word'
+          document.getElementById("extractWord").innerHTML = `Extract the last ${seedPhraseLength}th word`
           document.getElementById("diceFace").disabled = "disabled"
+          document.getElementById("seedPhraseLength").disabled = "disabled"
           document.getElementById("words").disabled = "disabled"
           document.getElementById("diceInput1").focus()
         }
@@ -604,7 +620,7 @@
       }
 
       function generateSample() {
-        const samplePhrase = [...Array(23).keys()]
+        const samplePhrase = [...Array(seedPhraseLength - 1).keys()]
           .map(() => bip39.wordlists.EN.random())
           .join(" ");
           document.getElementById("words").value = samplePhrase
@@ -630,8 +646,8 @@
         if (trimmedWords.length > 0) {
           wordCount = trimmedWords.length
         }
-        if (wordCount !== 23) {
-          const msg = "Please enter 23 words. (You entered " + wordCount + ")"
+        if (wordCount !== (seedPhraseLength-1)) {
+          const msg = "Please enter " + (seedPhraseLength-1) + " words. (You entered " + wordCount + ")"
           return validationReply(msg)
         }
         const dictionary = bip39.wordlists[bip39.getDefaultWordlist()]
